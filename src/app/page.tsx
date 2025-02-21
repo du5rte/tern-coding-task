@@ -1,16 +1,17 @@
 'use client'
 
-import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { YouTubeForm } from "@/components/YouTubeForm"
 import { YouTubeHero } from "@/components/YouTubeHero"
 import { Footer } from "@/components/Footer"
 
 export default function Home() {
-  const [videoUrl, setVideoUrl] = useState("")
+  const router = useRouter()
 
   const handleSubmit = (url: string) => {
-    setVideoUrl(url)
-    console.log(url)
+    // Encode the URL to make it safe for the query parameter
+    const encodedUrl = encodeURIComponent(url)
+    router.push(`/video?url=${encodedUrl}`)
   }
 
   return (

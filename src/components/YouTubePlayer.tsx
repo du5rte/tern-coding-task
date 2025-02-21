@@ -1,6 +1,7 @@
 'use client'
 
 import YouTube, { YouTubeProps } from 'react-youtube'
+import { useTheater } from '@/context/TheaterContext'
 
 // Extract video ID from URL
 const getVideoId = (url: string) => {
@@ -26,6 +27,7 @@ export interface YouTubePlayerProps {
 
 export function YouTubePlayer(props: YouTubePlayerProps) {
   const { videoUrl, className = '' } = props
+  const { enableTheaterMode, disableTheaterMode } = useTheater()
 
   const videoId = getVideoId(videoUrl)
 
@@ -37,6 +39,17 @@ export function YouTubePlayer(props: YouTubePlayerProps) {
     )
   }
 
+  const handleStateChange: YouTubeProps['onStateChange'] = (event) => {
+    // YouTube.PlayerState.PLAYING = 1
+    if (event.data === 1) {
+      enableTheaterMode()
+    }
+    // YouTube.PlayerState.PAUSED = 2
+    if (event.data === 2) {
+      disableTheaterMode()
+    }
+  }
+
   return (
     <div className={`aspect-video bg-gray-100 rounded-lg overflow-hidden ${className}`}>
       <YouTube
@@ -44,6 +57,7 @@ export function YouTubePlayer(props: YouTubePlayerProps) {
         opts={opts}
         className="w-full h-full"
         iframeClassName="w-full h-full"
+        onStateChange={handleStateChange}
       />
     </div>
   )

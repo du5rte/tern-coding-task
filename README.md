@@ -4,15 +4,17 @@ Welcome to my coding task solution! 👋
 
 Check out the **online** version at [https://tern-coding-task.vercel.app](https://tern-coding-task.vercel.app)
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app) depoloyed on [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js. 
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app) depoloyed on [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-To run locally run:
+To run locally:
 
-```bash
-npm run dev
-```
+1. Run `npm install` to install dependencies.
+2. Run `npm run dev` to start the development server.
+3. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Then open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📝 Project Overview
+
+> "A simple YouTube Video Player where users enter a video URL, and it auto plays while remembering the last watched position. It should have an edit option and be part of a minimal web app with a home page, a video page, and a funny GIF page."
 
 ## 🚀 Tech Stack
 

@@ -1,24 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🦅 Tern Coding Task
 
-## Getting Started
+Welcome to my coding task solution! 👋
 
-First, run the development server:
+Check out the **online** version at [https://tern-coding-task.vercel.app](https://tern-coding-task.vercel.app)
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app) depoloyed on [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js. 
+
+To run locally run:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project is built with:
+
+- ⚡️ [Next.js 15](https://nextjs.org/) - The React Framework for the Web
+- 🎨 [TailwindCSS](https://tailwindcss.com/) - A utility-first CSS framework
+- 📦 [Zustand](https://zustand-demo.pmnd.rs/) - Bear necessities for state management
+- 🎯 [React Hook Form](https://react-hook-form.com/) - Performant forms with easy validation
+- ⚡ [Zod](https://zod.dev/) - TypeScript-first schema validation
+- 🎬 [React YouTube](https://www.npmjs.com/package/react-youtube) - YouTube player component
+- ⚛️ [React 19](https://react.dev/) - The library for web and native user interfaces
+
+## 🛠️ Development Tools
+
+- 💪 [TypeScript](https://www.typescriptlang.org/) - JavaScript with superpowers
+- 📏 [ESLint](https://eslint.org/) - Pluggable JavaScript linter
+- ✨ [Prettier](https://prettier.io/) - Opinionated code formatter
+- 🚀 [TurboPack](https://turbo.build/pack) - Incremental bundler for maximum speed
+
+## 🔥 Features
+
+- ⚡️ Next.js 15 with TurboPack for blazing fast builds
+- 💎 TypeScript for type safety
+- 🎨 TailwindCSS for modern, utility-first styling
+- 📱 Responsive design
+- 🔍 ESLint + Prettier for code quality
+- 🎬 YouTube video integration
+- 📝 Form handling with validation
 
 ## Learn More
 
@@ -27,10 +50,6 @@ To learn more about Next.js, take a look at the following resources:
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📄 License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is MIT licensed.

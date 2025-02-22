@@ -10,8 +10,8 @@ export function Footer(props: FooterProps) {
   const { isTheaterMode } = useTheater()
   
   return (
-    <footer className={`p-8 text-center transition-colors duration-700 ${isTheaterMode ? 'bg-black/50 text-white' : ''} ${className}`}>
-      <Link>
+    <footer className={`p-8 text-center transition-colors duration-700 ${isTheaterMode ? 'text-white' : ''} ${className}`}>
+      <Link href="/giphy">
         Just Show Me a GIF Already!
       </Link>
     </footer>

@@ -5,7 +5,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from './Button'
-import { cleanYouTubeUrl, extractYoutubeIdFromUrl, isYoutubeUrl } from '@/utils/youtube'
+import { cleanYouTubeUrl, extractYoutubeIdFromUrl, isYoutubeUrl } from '@/utils/url'
 import { useIsTheaterMode } from '@/context/TheaterContext'
 import { useEffect, useState } from 'react'
 import { useVideoStore, VideoEntry } from '@/store/videoStore'
@@ -49,23 +49,27 @@ export function YouTubeForm(props: YouTubeFormProps) {
   })
 
   useEffect(() => {
-    const subscription = form.watch((value) => {
-      console.log('url not valid')
-      if (!value.url || !isYoutubeUrl(value.url)) {
-        console.log('url not valid')
+    const subscription = form.watch(({ url }) => {
+      // Reset entry if no URL or invalid YouTube URL
+      if (!url || !isYoutubeUrl(url)) {
         setEntry(null)
         return
       }
 
-      console.log('url valid')
+      const videoId = extractYoutubeIdFromUrl(url)
 
-      const videoId = extractYoutubeIdFromUrl(value.url)
+      if (!videoId) {
+        setEntry(null)
+        return
+      }
 
-      setEntry(videoId ? getVideo(videoId) : null)
-    });
+      const video = getVideo(videoId)
+      // Only show entries that have been watched (timestamp > 0)
+      setEntry(video && video.timestamp > 0 ? video : null)
+    })
 
-    return () => subscription.unsubscribe();
-  }, [form, getVideo]);
+    return () => subscription.unsubscribe()
+  }, [form, getVideo])
 
   const onSubmitForm = form.handleSubmit((data) => {
     // Extract and validate YouTube ID

@@ -8,10 +8,8 @@ import { Footer } from "@/components/Footer"
 export default function Home() {
   const router = useRouter()
 
-  const handleSubmit = (url: string) => {
-    // Encode the URL to make it safe for the query parameter
-    const encodedUrl = encodeURIComponent(url)
-    router.push(`/video?url=${encodedUrl}`)
+  const handleSubmit = (videoId: string) => {
+    router.push(`/video?id=${videoId}`)
   }
 
   return (

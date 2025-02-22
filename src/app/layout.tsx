@@ -1,5 +1,7 @@
+import { PropsWithChildren } from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { TheaterProvider } from "@/context/TheaterContext"
 import "./globals.css";
 
 const geistSans = Geist({

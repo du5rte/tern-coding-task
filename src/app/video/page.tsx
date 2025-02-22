@@ -7,10 +7,11 @@ import { TheaterProvider, useTheater } from '@/context/TheaterContext'
 
 function VideoPageContent() {
   const searchParams = useSearchParams()
-  const videoUrl = searchParams.get('url')
+  const videoId = searchParams.get('id')
+
   const { isTheaterMode } = useTheater()
 
-  if (!videoUrl) {
+  if (!videoId) {
     return (
       <div className="min-h-screen flex flex-col">
         <main className="flex-1 flex items-center justify-center">
@@ -25,7 +26,7 @@ function VideoPageContent() {
     <div className={`min-h-screen flex flex-col transition-colors duration-700 ${isTheaterMode ? 'bg-black' : 'bg-white'}`}>
       <main className={`flex-1 flex items-center p-8 transition-colors duration-700 ${isTheaterMode ? 'bg-black' : ''}`}>
         <div className="max-w-5xl w-full mx-auto">
-          <YouTubePlayer videoUrl={videoUrl} />
+          <YouTubePlayer videoId={videoId} />
         </div>
       </main>
       <Footer />

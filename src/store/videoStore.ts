@@ -53,7 +53,7 @@ export const useVideoStore = create<VideosState>()(
       },
 
       getVideo: (id: string) => {
-        return get().videos.get(id)
+        return get().videos.get(id) || null
       },
       
       clearVideo: (id: string) => {

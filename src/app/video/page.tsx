@@ -7,12 +7,10 @@ import { YouTubePlayer } from "@/components/YouTubePlayer";
 import { useTheater } from "@/context/TheaterContext";
 import { useRouter } from "next/navigation";
 
-export default function VideoPage() {
+function VideoContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const videoId = searchParams.get("id");
-
-  const { isTheaterMode } = useTheater();
 
   const handleVideoIdChange = (videoId: string) => {
     router.push(`/video?id=${videoId}`);
@@ -20,14 +18,30 @@ export default function VideoPage() {
 
   if (!videoId) {
     return (
-      <div className="min-h-screen flex flex-col">
-        <main className="flex-1 flex items-center justify-center">
-          <p className="text-gray-500">No video URL provided 🤔</p>
-        </main>
-        <Footer />
-      </div>
+      <p className="text-gray-500">No video URL provided 🤔</p>
     );
   }
+
+  return (
+    <div className="max-w-5xl w-full mx-auto">
+      <Suspense
+        fallback={
+          <div className="absolute w-full h-full bg-black rounded-lg flex items-center justify-center">
+            <p className="text-gray-500">Invalid YouTube URL 🤔</p>
+          </div>
+        }
+      >
+        <YouTubePlayer
+          videoId={videoId}
+          onVideoIdChange={handleVideoIdChange}
+        />
+      </Suspense>
+    </div>
+  );
+}
+
+export default function VideoPage() {
+  const { isTheaterMode } = useTheater();
 
   return (
     <div
@@ -35,23 +49,16 @@ export default function VideoPage() {
         isTheaterMode ? "bg-black" : "bg-white"
       }`}
     >
-      <main className={`flex-1 flex items-center p-8`}>
-        <div className="max-w-5xl w-full mx-auto">
-          <Suspense
-            fallback={
-              <div
-                className={'absolute w-full h-full bg-black rounded-lg flex items-center justify-center'}
-              >
-                <p className="text-gray-500">Invalid YouTube URL 🤔</p>
-              </div>
-            }
-          >
-            <YouTubePlayer
-              videoId={videoId}
-              onVideoIdChange={handleVideoIdChange}
-            />
-          </Suspense>
-        </div>
+      <main className="flex-1 flex items-center p-8">
+        <Suspense
+          fallback={
+            <div className="absolute w-full h-full bg-black rounded-lg flex items-center justify-center">
+            <p className="text-gray-500">Missing YouTube URL 🤔</p>
+          </div>
+          }
+        >
+          <VideoContent />
+        </Suspense>
       </main>
       <Footer />
     </div>

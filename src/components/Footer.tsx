@@ -1,5 +1,5 @@
 import { Link } from './Link'
-import { useTheater } from '@/context/TheaterContext'
+import { useIsTheaterMode } from '@/context/TheaterContext'
 
 export interface FooterProps {
   className?: string
@@ -7,7 +7,7 @@ export interface FooterProps {
 
 export function Footer(props: FooterProps) {
   const { className = '' } = props
-  const { isTheaterMode } = useTheater()
+  const isTheaterMode = useIsTheaterMode()
   
   return (
     <footer className={`p-8 text-center transition-colors duration-700 ${isTheaterMode ? 'text-white' : ''} ${className}`}>

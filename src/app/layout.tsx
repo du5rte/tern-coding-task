@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { TheaterProvider } from "@/context/TheaterContext"
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,7 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Tern Coding Task | YouTube Video Search",
-  description: "A Next.js application that allows you to search and watch YouTube videos with a clean, modern interface.",
+  description:
+    "A Next.js application that allows you to search and watch YouTube videos with a clean, modern interface.",
 };
 
 export default function RootLayout({
@@ -28,9 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <TheaterProvider>
-          {children}
-        </TheaterProvider>
+        {children}
       </body>
     </html>
   );

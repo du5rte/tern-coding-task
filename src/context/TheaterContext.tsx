@@ -33,6 +33,11 @@ export function TheaterProvider({ children }: TheaterProviderProps) {
   )
 }
 
+export function useIsTheaterMode() {
+  const context = useContext(TheaterContext)
+  return context?.isTheaterMode
+}
+
 export function useTheater() {
   const context = useContext(TheaterContext)
   if (context === undefined) {

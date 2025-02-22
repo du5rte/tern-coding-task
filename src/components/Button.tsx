@@ -1,7 +1,7 @@
 'use client'
 
 import { ButtonHTMLAttributes } from 'react'
-import { useTheater } from '@/context/TheaterContext'
+import { useIsTheaterMode } from '@/context/TheaterContext'
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: 'primary' | 'secondary'
@@ -10,7 +10,7 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 export function Button(props: ButtonProps) {
   const { className = '', variant = 'primary', ...rest } = props
 
-  const { isTheaterMode } = useTheater()
+  const isTheaterMode = useIsTheaterMode()
 
   const variantClasses = {
     primary: 'bg-red-600 text-white hover:bg-red-500',

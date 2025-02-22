@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from './Button'
 import { cleanYouTubeUrl, extractYoutubeIdFromUrl, isYoutubeUrl } from '@/utils/youtube'
-import { useTheater } from '@/context/TheaterContext'
+import { useIsTheaterMode } from '@/context/TheaterContext'
 import { useEffect, useState } from 'react'
 import { useVideoStore, VideoEntry } from '@/store/videoStore'
 import { formatSeconds, formatDate } from '@/utils/format';
@@ -35,7 +35,7 @@ export interface YouTubeFormProps {
 
 export function YouTubeForm(props: YouTubeFormProps) {
   const { onSubmit, defaultValue = '', variant = 'primary' } = props
-  const { isTheaterMode } = useTheater()
+  const isTheaterMode = useIsTheaterMode()
   const { getVideo } = useVideoStore()
 
 

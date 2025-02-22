@@ -94,7 +94,7 @@ export function YouTubeForm(props: YouTubeFormProps) {
               <input
                 {...field}
                 type="text"
-                placeholder="https://youtube.com/watch?v="
+                placeholder="https://youtube.com/watch?v=xXyzXxyz"
                 className={`flex-1 px-4 py-2 rounded border outline-none transition-colors duration-700 ${inputClasses}`}
 
                 onChange={(e) => onChange(cleanYouTubeUrl(e.target.value))}

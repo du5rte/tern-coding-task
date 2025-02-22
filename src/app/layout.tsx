@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   title: "Tern Coding Task | YouTube Video Search",
   description:
     "A Next.js application that allows you to search and watch YouTube videos with a clean, modern interface.",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+  },
 };
 
 export default function RootLayout({

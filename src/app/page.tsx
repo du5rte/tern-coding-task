@@ -15,8 +15,8 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <main className="flex-1 flex items-center p-8">
+    <div className="h-[100dvh] flex flex-col">
+      <main className="flex-1 flex items-center justify-center p-8">
         <div className="max-w-5xl w-full mx-auto">
           <div className="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
             <div>

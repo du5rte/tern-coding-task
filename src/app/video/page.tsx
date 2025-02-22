@@ -45,11 +45,11 @@ export default function VideoPage() {
 
   return (
     <div
-      className={`min-h-screen flex flex-col transition-colors duration-700 ${
+      className={`h-[100dvh] flex flex-col transition-colors duration-700 ${
         isTheaterMode ? "bg-black" : "bg-white"
       }`}
     >
-      <main className="flex-1 flex items-center p-8">
+      <main className="flex-1 flex items-center justify-center p-8">
         <Suspense
           fallback={
             <div className="absolute w-full h-full bg-black rounded-lg flex items-center justify-center">

@@ -1,4 +1,3 @@
-import { PropsWithChildren } from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { TheaterProvider } from "@/context/TheaterContext"
@@ -29,7 +28,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <TheaterProvider>
+          {children}
+        </TheaterProvider>
       </body>
     </html>
   );

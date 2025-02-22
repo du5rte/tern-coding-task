@@ -1,141 +1,190 @@
-'use client'
+"use client";
 
-import { useEffect, useRef, useState } from 'react'
-import YouTube, { YouTubeProps, YouTubePlayer as YTPlayer } from 'react-youtube'
+import { useCallback, useEffect, useRef, useState, useMemo } from "react";
+import YouTube, {
+  YouTubePlayer as YTPlayer,
+  YouTubeEvent,
+} from "react-youtube";
+import { useInterval } from "usehooks-ts";
 
-import { useTheater } from '@/context/TheaterContext'
-import { useVideoStore } from '@/store/videoStore'
-import { useInterval } from 'usehooks-ts'
+import { useTheater } from "@/context/TheaterContext";
+import { useVideoStore } from "@/store/videoStore";
 
-const opts: YouTubeProps['opts'] = {
-  height: '100%',
-  width: '100%',
-  playerVars: {
-    // https://developers.google.com/youtube/player_parameters
-    autoplay: 1,
-    mute: 1, // As of Chrome 66, videos must be muted in order to play automatically
-  },
-}
+import { Button } from "./Button";
+import { YouTubeForm } from "./YouTubeForm";
 
-const INTERVAL = 1000
+const { PlayerState } = YouTube;
+
+const INTERVAL = 1000;
 
 export interface YouTubePlayerProps {
-  videoId: string
-  className?: string
+  videoId: string;
+  onVideoIdChange: (videoId: string) => void;
+  className?: string;
 }
 
 export function YouTubePlayer(props: YouTubePlayerProps) {
-  const { videoId, className = '' } = props
-  
-  const playerRef = useRef<YTPlayer | undefined>(undefined)
+  const { videoId, onVideoIdChange, className = "" } = props;
 
-  const { enableTheaterMode, disableTheaterMode } = useTheater()
-  const { addVideo, getVideoTimestamp, updateTimeStamp, clearVideoTimestamp } = useVideoStore()
+  const playerRef = useRef<YTPlayer | undefined>(undefined);
 
-  const [, setLoading] = useState<boolean>(true)
-  const [isPlaying, setPlaying] = useState<boolean>(false)
-  const [error,setError] = useState<Error>();
+  const { enableTheaterMode, disableTheaterMode, isTheaterMode } = useTheater();
+  const { addVideo, getVideoTimestamp, updateTimeStamp, clearVideo } =
+    useVideoStore();
+
+  const [isPlaying, setPlaying] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const startingTimestamp = useMemo(
+    () => getVideoTimestamp(videoId),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [videoId]
+  );
 
   useEffect(() => {
-    console.log(playerRef.current) // TODO: delete
-    const onStart = async () => {
-      const timestamp = getVideoTimestamp(videoId)
-  
-      // Play last played timestamp if available
-      if (timestamp !== null) {
-        console.log(`restore video ${videoId}: ${timestamp}`)
-        
-        await playerRef.current?.internalPlayer.seekTo(timestamp, true) // seekTo(seconds, allowSeekAhead)
-        await playerRef.current?.internalPlayer.playVideo()
-      } 
-      // Else register the video
-      else {
-        console.log('add video')
-        addVideo(videoId)
-      }
-  }
+    if (isPlaying) {
+      enableTheaterMode();
+    } else {
+      disableTheaterMode();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPlaying]);
 
-    onStart()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  useEffect(() => {
+    if (isEditing) {
+      playerRef.current?.internalPlayer.pauseVideo();
+    } else {
+      playerRef.current?.internalPlayer.playVideo();
+    }
+  }, [isEditing]);
 
+  const handleReady = useCallback(() => {
+    console.log("ready");
+
+    if (startingTimestamp !== null) {
+      console.log(`restore video ${videoId}: ${startingTimestamp}`);
+    }
+    // Else register the video
+    else {
+      console.log("add video");
+      addVideo(videoId);
+    }
+  }, [startingTimestamp, videoId, addVideo]);
+
+  const updateVideoTimestamp = useCallback(async () => {
+    const currentTime =
+      await playerRef.current?.internalPlayer.getCurrentTime();
+    if (!currentTime) return;
+
+    const seconds = Math.floor(currentTime);
+    console.log("currentTime", seconds);
+
+    updateTimeStamp(videoId, seconds);
+  }, [videoId, updateTimeStamp]);
+
+  // Using an interval as a workaround to using onSeek to update the timestamp
   useInterval(
-    async () => {
-      const currentTime = await playerRef.current.internalPlayer.getCurrentTime()
-      const seconds = Math.floor(currentTime)
-      console.log('currentTime', seconds)
-      updateTimeStamp(videoId, seconds)
+    updateVideoTimestamp,
+    // Would be more efficient to stop the interval when not playing (isPlaying ? INTERVAL : null)
+    // But the user can still seek while the video is paused, so we keep the interval running
+    INTERVAL
+  );
+
+  const handleStateChange = useCallback(
+    (event: YouTubeEvent) => {
+      // There's a high change someone can play and pause video to test without elapsing 1s
+      updateVideoTimestamp();
+
+      if (event.data === PlayerState.PLAYING) {
+        console.log("playing");
+        setPlaying(true);
+      }
+
+      if (event.data === PlayerState.PAUSED) {
+        console.log("paused");
+        setPlaying(false);
+      }
+
+      if (event.data === PlayerState.ENDED) {
+        console.log("ended");
+        setPlaying(false);
+
+        // Clear video when it reaches the end
+        clearVideo(videoId);
+      }
     },
-    // Delay in milliseconds or null to stop it
-    isPlaying ? INTERVAL : null,
-  )
+    [updateVideoTimestamp, clearVideo, videoId]
+  );
 
-  // if (loading) {
-  //   return (
-  //     <div className={`aspect-video bg-gray-100 rounded-lg flex items-center justify-center ${className}`}>
-  //     <p className="text-gray-500">Loading...</p>
-  //   </div>
-  //   )
-  // }
-
-  if (error) {
-    return (
-      <div className={`aspect-video bg-gray-100 rounded-lg flex items-center justify-center ${className}`}>
-        <p className="text-gray-500">Invalid YouTube URL 🤔</p>
-      </div>
-    )
-  }
-
-  const handleStateChange: YouTubeProps['onStateChange'] = (event) => {
-    // YouTube.PlayerState.PLAYING = 1
-    if (event.data === 1) {
-      console.log('playing')
-      setPlaying(true)
-      enableTheaterMode()
-    }
-
-    // YouTube.PlayerState.PAUSED = 2
+  const handleError = useCallback((event: YouTubeEvent) => {
+    console.log("error");
     if (event.data === 2) {
-      console.log('paused')
-      setPlaying(false)
-      disableTheaterMode()
+      setError(new Error("Invalid YouTube URL"));
     }
+  }, []);
 
-    // YouTube.PlayerState.ENDED = 0
-    if (event.data === 0) {
-      console.log('ended')
-      setPlaying(false)
-      disableTheaterMode()
+  const handleEdit = useCallback(() => {
+    setIsEditing((prev) => !prev);
+  }, []);
 
-      // Clear timestamp when video ends
-      clearVideoTimestamp(videoId)
-    }
-  }
+  const handleVideoIdChange = useCallback(
+    (newVideoId: string) => {
+      setError(null);
+      onVideoIdChange(newVideoId);
+      setIsEditing(false);
+    },
+    [onVideoIdChange]
+  );
 
-  const handleReady: YouTubeProps['onReady'] = async () => {
-    console.log('ready')
-    setLoading(false)
-  }
-
-  const handlError: YouTubeProps['onError'] = (event) => {
-    console.log('error')
-    if (event.data === 2) {
-      setError(new Error('Invalid YouTube URL'));
-    }
-  }
+  const bgColor = isTheaterMode ? "bg-neutral-900" : "bg-neutral-100";
 
   return (
-    <div className={`aspect-video bg-gray-100 rounded-lg overflow-hidden ${className}`}>
-      <YouTube
-        ref={playerRef}
-        videoId={videoId}
-        opts={opts}
-        className="w-full h-full"
-        iframeClassName="w-full h-full"
-        onStateChange={handleStateChange}
-        onReady={handleReady}
-        onError={handlError}
-      />
+    <div className={`relative ${bgColor} aspect-video rounded-lg ${className}`}>
+      {error && (
+        <div
+          className={`absolute w-full h-full bg-black rounded-lg flex items-center justify-center ${className}`}
+        >
+          <p className="text-gray-500">Invalid YouTube URL 🤔</p>
+        </div>
+      )}
+
+      {/* Form */}
+      {isEditing && (
+        <div className="absolute w-full h-full flex items-center justify-center p-8 bg-gradient-to-t from-[rgba(0,0,0,0.6)] to-black">
+          <YouTubeForm variant="secondary" onSubmit={handleVideoIdChange} />
+        </div>
+      )}
+
+      {/* Player */}
+      <div className="rounded-lg w-full h-full overflow-hidden">
+        <YouTube
+          ref={playerRef}
+          videoId={videoId}
+          opts={{
+            height: "100%",
+            width: "100%",
+            playerVars: {
+              // https://developers.google.com/youtube/player_parameters
+              autoplay: 1,
+              mute: 1, // As of Chrome 66, videos must be muted in order to play automatically
+              start: startingTimestamp || 0,
+            },
+          }}
+          className="w-full h-full"
+          iframeClassName="w-full h-full"
+          onStateChange={handleStateChange}
+          onReady={handleReady}
+          onError={handleError}
+        />
+      </div>
+
+      {/* Controls */}
+      <div className="absolute -bottom-14 left-0 right-0 flex justify-center">
+        <Button variant="secondary" onClick={handleEdit}>
+          {isEditing ? "Close" : "Change Video"}
+        </Button>
+      </div>
     </div>
-  )
+  );
 }

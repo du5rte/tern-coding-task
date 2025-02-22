@@ -1,16 +1,17 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-interface VideoEntry {
+export interface VideoEntry {
   timestamp: number
   lastUpdated: number
 }
 
-interface VideosState {
+export interface VideosState {
   videos: Map<string, VideoEntry>
   addVideo: (id: string) => void
   updateTimeStamp: (id: string, timestamp: number) => void
   getVideoTimestamp: (id: string) => number | null
+  getVideo: (id: string) => VideoEntry | null
   clearVideo: (id: string) => void
   getRecentVideos: () => VideoEntry[]
 }
@@ -49,6 +50,10 @@ export const useVideoStore = create<VideosState>()(
       getVideoTimestamp: (id: string) => {
           const entry = get().videos.get(id)
           return entry?.timestamp ?? null
+      },
+
+      getVideo: (id: string) => {
+        return get().videos.get(id)
       },
       
       clearVideo: (id: string) => {

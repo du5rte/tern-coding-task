@@ -15,6 +15,19 @@ export function extractYoutubeIdFromUrl(url: string) {
   return undefined;
 }
 
+export function isYoutubeUrl(url: string): boolean {
+  return youtubeFormats.some((re) => re.test(url));
+}
+
+
 export function makeUrlfromYouTubeId(videoId: string): string {
-  return `https://www.youtube.com/watch?v=${videoId}`;
+  return `https://youtube.com/watch?v=${videoId}`;
+}
+
+export function cleanYouTubeUrl(url: string): string {
+  const id = extractYoutubeIdFromUrl(url);
+  if (id) {
+    return makeUrlfromYouTubeId(id);
+  }
+  return url;
 }

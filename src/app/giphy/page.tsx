@@ -9,7 +9,10 @@ export default function GiphyPage() {
     <div className="container mx-auto p-4">
       <Link
         href="/"
-        onClick={() => router.back()}
+        onClick={(e) => {
+          e.preventDefault()
+          router.back()
+        }}
         className="inline-flex items-center mb-4 text-gray-400 hover:text-gray-300 transition-colors"
       >
         Back
@@ -21,7 +24,7 @@ export default function GiphyPage() {
         <div className="flex justify-start">
           <div className="bg-gray-200 rounded-lg p-4 max-w-md">
             <p className="text-gray-900">
-              After debugging for hours why autoPlay won&apos;t work 🤔
+              After debugging for hours why <strong>autoPlay</strong> won&apos;t work...
             </p>
           </div>
         </div>

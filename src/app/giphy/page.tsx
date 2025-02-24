@@ -32,10 +32,7 @@ export default function GiphyPage() {
             <div className="text-gray-900 space-y-3">
               <p className="italic border-l-4 border-gray-400 pl-3">
                 As of Chrome 66, videos must be <strong>muted</strong> in order
-                to <strong>play automatically</strong>. Some players, like
-                Facebook, cannot be unmuted until the user interacts with the
-                video, so you may want to enable controls to allow users to
-                unmute videos themselves. Please set{" "}
+                to <strong>play automatically</strong>. Please set{" "}
                 <code className="bg-gray-300 text-black px-2 py-0.5 rounded font-mono text-sm">
                   muted={"{true}"}
                 </code>
